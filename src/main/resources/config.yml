@@ -1,0 +1,6 @@
+settings:
+  tp-msg: 'Stai essendo deportato. Attendere prego...'
+  no-permission: 'Non hai i permessi per eseguire il comando'
+  z-limit: 0
+  x-limit: 0
+

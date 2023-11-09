@@ -1,0 +1,17 @@
+name: Shut
+version: '${project.version}'
+main: com.mailo.shut.Main
+api-version: '1.13'
+author: Harly47
+description: Shuts down your pc (maybe)
+commands:
+  menu:
+    description: bo2
+    aliases:
+      - shutmenu
+      - gallina
+  shut:
+    description: Bo
+    aliases:
+      - shutdown
+      - pollo
