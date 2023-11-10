@@ -14,7 +14,7 @@ public class Main extends JavaPlugin {
         saveConfig();
         getCommand("shut").setTabCompleter(new ShutTabCompleter());
         getCommand("menu").setExecutor(new ShutMenu());
-        getCommand("shut").setExecutor(new ShutCommand());
+        getCommand("shut").setExecutor(new Shut());
     }
 
     public static Main getInstance(){

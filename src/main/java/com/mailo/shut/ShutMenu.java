@@ -3,7 +3,6 @@ package com.mailo.shut;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.block.EnderChest;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -17,7 +16,6 @@ import java.util.ArrayList;
 
 public class ShutMenu implements CommandExecutor {
 
-    @Override
     public boolean onCommand(CommandSender Sender, Command command, String label, String[] args) {
 
         Player p = (Player) Sender;

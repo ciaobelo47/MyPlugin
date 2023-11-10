@@ -8,20 +8,16 @@ import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Recipe;
 
-import java.util.Objects;
-
-public class ShutCommand implements CommandExecutor {
+public class Shut implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (command.getName().equalsIgnoreCase("shut")) {
             if (sender instanceof Player) {
                 if (args.length == 0) {
                     // First if block that runs the command without arguments
 
-                    teleport(sender, command, label, args);
+                    teleport(sender);
 
                 } else if (args[0].equalsIgnoreCase("options")) {
                     if (args.length>1){
@@ -120,10 +116,14 @@ public class ShutCommand implements CommandExecutor {
         return false;
     }
 
-
+    /**
+     * Metodo che serve a trovare un blocco random nei limiti dati alla config
+     *
+     * @return Block b
+     */
     private Block randomBlock() {
         // Method that finds a random block in the world (always the highest in the coordinates)
-        int xlimit = Main.getInstance().getConfig().getInt("setting.x-limit");
+        int xlimit = Main.getInstance().getConfig().getInt("settings.x-limit");
         int zlimit = Main.getInstance().getConfig().getInt("settings.z-limit");
         double x1 = Math.random() * xlimit;
         if (((int) (Math.random() * 2)) == 1) {
@@ -139,7 +139,12 @@ public class ShutCommand implements CommandExecutor {
         return b;
     }
 
-    private void teleport(CommandSender sender, Command command, String label, String[] args) {
+    /**
+     * Metodo che serve a teletrasportare il player
+     *
+     * @param sender Parametro che definisce il player che ha mandato il comando
+     */
+    private void teleport(CommandSender sender) {
         Player target = (Player) sender;
         Block b = Bukkit.getServer().getWorld("world").getBlockAt(0, 0, 0);
 

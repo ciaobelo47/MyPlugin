@@ -14,7 +14,7 @@ public class ShutMenuListener implements Listener {
                return;
            } else if (event.getCurrentItem().getType() == Material.DIAMOND_SWORD) {
                Player p = (Player) event.getWhoClicked();
-               p.setFlying(true);
+               p.sendMessage(ChatColor.RED + "CIao");
 
            }
 
