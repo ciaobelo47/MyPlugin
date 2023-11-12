@@ -15,6 +15,7 @@ public class Main extends JavaPlugin {
         getCommand("shut").setTabCompleter(new ShutTabCompleter());
         getCommand("menu").setExecutor(new ShutMenu());
         getCommand("shut").setExecutor(new Shut());
+        getServer().getPluginManager().registerEvents(new ShutMenuListener(), this);
     }
 
     public static Main getInstance(){
