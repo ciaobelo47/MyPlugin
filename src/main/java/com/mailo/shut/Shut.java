@@ -144,7 +144,7 @@ public class Shut implements CommandExecutor {
      *
      * @param sender Parametro che definisce il player che ha mandato il comando
      */
-    private void teleport(CommandSender sender) {
+    public void teleport(CommandSender sender) {
         Player target = (Player) sender;
         Block b = Bukkit.getServer().getWorld("world").getBlockAt(0, 0, 0);
 
