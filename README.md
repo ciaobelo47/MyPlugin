@@ -17,7 +17,7 @@ this
 
 1. Download the latest release from the [*releases tab*](https://github.com/ciaobelo47/Shut/releases)
 2. Put the file just dowloaded in the server's plugin folder
-   ![folder.png](https://imgur.com/a/vARuPmZ)
+   <img alt="folder.png" height="200" src="https://i.imgur.com/z9hKwPT.png" width="400"/>
 3. Start normally the server and enjoy!
 
 
