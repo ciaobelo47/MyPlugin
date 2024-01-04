@@ -13,10 +13,11 @@ public class Main extends JavaPlugin {
         this.getConfig().options().copyDefaults(true);
         saveConfig();
         getCommand("shut").setTabCompleter(new ShutTabCompleter());
-        getCommand("menu").setExecutor(new ShutMenu());
         getCommand("shut").setExecutor(new Shut());
+        getCommand("menu").setExecutor(new ShutMenu());
         getServer().getPluginManager().registerEvents(new ShutMenuListener(), this);
     }
+
 
     public static Main getInstance(){
         return plugin;

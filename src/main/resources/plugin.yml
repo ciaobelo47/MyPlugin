@@ -2,7 +2,10 @@ name: Shut
 version: '${project.version}'
 main: com.mailo.shut.Main
 api-version: '1.13'
-author: Harly47
+authors:
+  - Harly47
+  - Fmarco98
+  - ELPAKISTANO (il sacco da boxe)
 description: Shuts down your pc (maybe)
 commands:
   menu:
