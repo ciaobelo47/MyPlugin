@@ -15,7 +15,7 @@ this
 
 ### The Real Installation
 
-1. Download the latest release from the [*releases tab*](https://github.com/ciaobelo47/Shut/releases)
+1. Download the latest release from the [*releases tab*](https://github.com/ciaobelo47/Shut/releases/latest)
 2. Put the file just dowloaded in the server's plugin folder
    ![folder.png](https://i.imgur.com/z9hKwPT.png)
 3. Start normally the server and enjoy!
