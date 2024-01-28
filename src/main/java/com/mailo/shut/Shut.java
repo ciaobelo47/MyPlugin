@@ -72,16 +72,20 @@ public class Shut implements CommandExecutor {
      *
      * @return Bloc
      */
-    private static Block randomBlock() {
+    public static Block randomBlock(Player p) {
         // Method that finds a random block in the world (always the highest in the coordinates)
         int xlimit = Main.getInstance().getConfig().getInt("settings.x-limit");
         int zlimit = Main.getInstance().getConfig().getInt("settings.z-limit");
-        double x1 = Math.random() * xlimit;
+
+        double pX = p.getLocation().getX();
+        double pZ = p.getLocation().getZ();
+
+        double x1 = pX + (Math.random() * xlimit);
         if (((int) (Math.random() * 2)) == 1) {
             x1 *= -1;
         }
 
-        double z1 = Math.random() * zlimit;
+        double z1 = pZ + (Math.random() * zlimit);
         if (((int) (Math.random() * 2)) == 1) {
             z1 *= -1;
         }
@@ -96,20 +100,25 @@ public class Shut implements CommandExecutor {
      * @param target Parametro che definisce il player che ha mandato il comando e che verrà teletrasportato
      */
     public static void teleport(CommandSender target) {
-        Player t = (Player) target;
+        Player p = (Player) target;
         Block b = Bukkit.getServer().getWorld("world").getBlockAt(0, 0, 0);
+        int n = 0;
 
         do {
-            b = randomBlock();
+            b = randomBlock(p);
+            n++;
         } while (b.isLiquid());
 
-        System.out.println("[Shut] " + target.getName() + " è stato deportato a " + b.getX() + " " + b.getY() + " " + b.getZ() + ".");
+        if (Main.getInstance().getConfig().getBoolean("settings.debug")) {
+            System.out.println("[ShutDebug] Cycle repeat: " + n);
+        }
+        System.out.println("[Shut] " + p.getName() + " è stato deportato a " + b.getX() + " " + b.getY() + " " + b.getZ() + ".");
 
         Location l = new Location(Bukkit.getWorld("world"), (double) (b.getX()) + 0.5, b.getY() + 1, (double) (b.getZ()) + 0.5);
 
-        t.sendMessage(ChatColor.RED + Main.getInstance().getConfig().getString("settings.tp-msg"));
+        p.sendMessage(ChatColor.RED + Main.getInstance().getConfig().getString("settings.tp-msg"));
 
-        t.teleport(l);
+        p.teleport(l);
     }
 
     /**
@@ -119,22 +128,28 @@ public class Shut implements CommandExecutor {
      * @param biome  Parametro che definisce il bioma in cui <span style=font-style:italic;>target</span> verrà teletrasportato.
      */
     public static void teleportWB(CommandSender target, String biome) {
-        Player s = (Player) target;
+        Player p = (Player) target;
         // Second if block that runs the command with the biome argument (with permission)
 
         Block b = Bukkit.getServer().getWorld("world").getBlockAt(0, 0, 0);
+        int n = 0;
 
         do {
-            b = randomBlock();
+            b = randomBlock(p);
+            n++;
         } while (b.isLiquid() || b.getBiome() != Biome.valueOf(biome.toUpperCase().replace("-", "_")));
 
-        System.out.println("[Shut] " + s.getName() + " è stato deportato a " + b.getX() + " " + b.getY() + " " + b.getZ() + " nel bioma " + biome + ".");
+        if (Main.getInstance().getConfig().getBoolean("settings.debug")) {
+            System.out.println("[ShutDebug] Cycle Counter: " + n);
+        }
+
+        System.out.println("[Shut] " + p.getName() + " è stato deportato a " + b.getX() + " " + b.getY() + " " + b.getZ() + " nel bioma " + biome + ".");
 
         Location l = new Location(Bukkit.getWorld("world"), (double) b.getX() + 0.5, (double) b.getY() + 1, (double) b.getZ() + 0.5);
 
-        s.sendMessage(ChatColor.RED + Main.getInstance().getConfig().getString("settings.tp-msg"));
+        p.sendMessage(ChatColor.RED + Main.getInstance().getConfig().getString("settings.tp-msg"));
 
-        s.teleport(l);
+        p.teleport(l);
 
     }
 
@@ -165,10 +180,25 @@ public class Shut implements CommandExecutor {
             } else {
                 sender.sendMessage(ChatColor.RED + "Il limite di blocchi z non è stato impostato correttamente");
             }
+        } else if (args[1].equalsIgnoreCase("debug")) {
+
+            boolean b = Boolean.parseBoolean(args[2]);
+            Main.getInstance().getConfig().set("settings.debug", b);
+            Main.getInstance().saveConfig();
+            if (Main.getInstance().getConfig().get("settings.debug").equals(b)) {
+                if (Main.getInstance().getConfig().getBoolean("settings.debug")) {
+                    sender.sendMessage(ChatColor.GREEN + "[ShutDebug] Debug on");
+                } else {
+                    sender.sendMessage(ChatColor.RED + "[ShutDebug] Debug off");
+                }
+            } else {
+                sender.sendMessage(ChatColor.RED + "Errore nella modifica dell'opzione");
+            }
         } else {
             sender.sendMessage(ChatColor.RED + "Argomento non valido");
         }
 
     }
+
 }
 

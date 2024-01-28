@@ -16,7 +16,6 @@ public class ShutTabCompleter implements TabCompleter {
     private final List<String> biomes = new ArrayList<String>();
     private final List<String> players = new ArrayList<String>();
 
-
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         if (args.length == 1) {
@@ -37,7 +36,6 @@ public class ShutTabCompleter implements TabCompleter {
                 } catch (Exception e) {
                     continue;
                 }
-
 
             }
         }

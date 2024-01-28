@@ -3,4 +3,6 @@ settings:
   no-permission: 'Non hai i permessi per eseguire il comando'
   z-limit: 0
   x-limit: 0
+  debug: false
+
 

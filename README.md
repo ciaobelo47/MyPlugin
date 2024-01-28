@@ -2,7 +2,7 @@
 
 This plugin is used to teleport a player in a random location in the world
 
-I know that the name doesn't reflect his use but when i did in the first place i didn't know i was going serious with
+I know that the name doesn't reflect his use but when I did in the first place I didn't know I was going serious with
 this
 
 ***

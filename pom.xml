@@ -6,7 +6,7 @@
 
     <groupId>com.mailo</groupId>
     <artifactId>Shut</artifactId>
-    <version>0.2-beta</version>
+    <version>0.4-beta</version>
     <packaging>jar</packaging>
 
     <name>Shut</name>
@@ -23,8 +23,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <source>16</source>
+                    <target>16</target>
                 </configuration>
             </plugin>
             <plugin>
