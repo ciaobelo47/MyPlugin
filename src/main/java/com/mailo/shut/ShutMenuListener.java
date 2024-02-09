@@ -26,51 +26,62 @@ public class ShutMenuListener implements Listener {
             } else if (event.getCurrentItem().getType() == Material.PLAYER_HEAD && event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.WHITE + "Players Random Teleport")) {
                 //players GUI
                 if (p.isOp()) {
-
                     PlayerList();
                     p.openInventory(ShutMenu.Players);
-
                 } else {
-
-                    p.sendMessage(ChatColor.RED + "STUPID");
+                    p.sendMessage(ChatColor.RED + "Not enough Permissions");
                     event.setCancelled(true);
-
                 }
-
 
             } else if (event.getCurrentItem().getType().equals(Material.MAGENTA_GLAZED_TERRACOTTA) && event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.LIGHT_PURPLE + "Random Teleport")) {
                 // Direct RTP
-
                 p.playSound(p, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 100, 0);
                 p.closeInventory();
                 Shut.teleport(p);
 
             } else if (event.getCurrentItem().getType().equals(Material.GRASS_BLOCK) && event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.GREEN + "Biomes Random Teleport")) {
                 // Opens Biomes Inventory
+                if (p.isOp()) {
+                    BiomesList();
+                    p.openInventory(ShutMenu.Biomes);
+                } else {
+                    p.sendMessage(ChatColor.RED + "Not enough Permissions");
+                }
 
-                BiomesList();
-                p.openInventory(ShutMenu.Biomes);
+            } else if (event.getCurrentItem().getType().equals(Material.COMPARATOR) && event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.YELLOW + "Settings")) {
+                //Opens Settings
+                if (p.isOp()) {
+                    p.openInventory(ShutMenu.Settings);
+                } else {
+                    p.sendMessage(ChatColor.RED + "Not enough Permissions");
+                }
+
             }
         } else if (event.getView().getTitle().equalsIgnoreCase(ChatColor.LIGHT_PURPLE + "Players")) {
             //Do Things in Players GUI
+            if (event.getCurrentItem() == null) {
+                return;
+            } else if (event.getCurrentItem().getType().equals(Material.BARRIER)) {
+                p.openInventory(ShutMenu.ShutMenuInventory);
 
-            ItemStack targetItem = event.getCurrentItem();
-            Player target = Bukkit.getPlayer(targetItem.getItemMeta().getDisplayName());
-            target.playSound(p, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0F, 0.0F);
-            target.closeInventory();
-            Shut.teleport(target);
-            event.setCancelled(true);
+            } else {
+                ItemStack targetItem = event.getCurrentItem();
+                Player target = Bukkit.getPlayer(targetItem.getItemMeta().getDisplayName());
+                target.playSound(p, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0F, 0.0F);
+                target.closeInventory();
+                Shut.teleport(target);
+                event.setCancelled(true);
+
+            }
 
         } else if (event.getView().getTitle().equalsIgnoreCase(ChatColor.LIGHT_PURPLE + "Biomes")) {
             //Do Things in Biomes GUI
             if (event.getCurrentItem().getType().equals(Material.ARROW)) {
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase("Pagina Successiva")) {
-
                     p.openInventory(ShutMenu.BiomesPG2);
                     event.setCancelled(true);
 
                 } else if (event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase("Pagina Precedente")) {
-
                     p.openInventory(ShutMenu.Biomes);
                     event.setCancelled(true);
 
@@ -81,10 +92,18 @@ public class ShutMenuListener implements Listener {
                 p.closeInventory();
                 Shut.teleportWB(p, biome);
                 event.setCancelled(true);
+
             } else if (event.getCurrentItem().getType().equals(Material.BARRIER)) {
+                p.openInventory(ShutMenu.ShutMenuInventory);
 
-                p.openInventory(ShutMenu.ShutMenu);
+            }
 
+        } else if (event.getView().getTitle().equalsIgnoreCase(ChatColor.LIGHT_PURPLE + "Settings")) {
+            //Do Things in Settings
+            if (event.getCurrentItem().getType().equals(Material.BARRIER)) {
+                p.openInventory(ShutMenu.ShutMenuInventory);
+            } else {
+                return;
             }
         }
     }
@@ -106,7 +125,7 @@ public class ShutMenuListener implements Listener {
     private void BiomesList() {
         Biome[] arrb = Biome.values();
         for (int i = 0; i < 45; i++) {
-            String b1 = arrb[i].name().toLowerCase();
+            String b1 = arrb[i].name().replace('_', ' ');
             ItemStack blocks = new ItemStack(Material.GRASS_BLOCK, 1);
             ItemMeta meta = blocks.getItemMeta();
             meta.setDisplayName(b1);
@@ -114,7 +133,7 @@ public class ShutMenuListener implements Listener {
             ShutMenu.Biomes.setItem(i, blocks);
         }
         for (int i = 45; i < arrb.length; i++) {
-            String b2 = arrb[i].name().toLowerCase();
+            String b2 = arrb[i].name().replace('_', ' ');
             ItemStack blocks2 = new ItemStack(Material.GRASS_BLOCK, 1);
             ItemMeta meta2 = blocks2.getItemMeta();
             meta2.setDisplayName(b2);
@@ -122,4 +141,6 @@ public class ShutMenuListener implements Listener {
             ShutMenu.BiomesPG2.setItem(i - 45, blocks2);
         }
     }
+
+
 }

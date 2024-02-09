@@ -6,15 +6,13 @@ authors:
   - Harly47
   - Fmarco98
   - ELPAKISTANO (il sacco da boxe)
-description: Tp random.
+description: This plugin is used to teleport people randomly
 commands:
-  menu:
-    description: bo2
+  shutmenu:
+    description: Opens the plugin menu
     aliases:
-      - shutmenu
       - gallina
   shut:
-    description: Bo
+    description: Main command of the plugin
     aliases:
       - shutdown
-      - pollo

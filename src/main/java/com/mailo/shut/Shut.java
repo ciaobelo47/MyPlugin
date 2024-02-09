@@ -19,43 +19,56 @@ public class Shut implements CommandExecutor {
 
                     teleport(sender);
 
+                } else if (args[0].equalsIgnoreCase("help")) {
+                    help(sender);
+
                 } else if (args[0].equalsIgnoreCase("options")) {
 
-                    if (args.length > 1) {
+                    if (sender.isOp()) {
+                        if (args.length > 1) {
 
-                        options(sender, args);
+                            options(sender, args);
 
+                        } else {
+                            sender.sendMessage(ChatColor.RED + "Missing Arguments");
+                        }
                     } else {
-                        sender.sendMessage(ChatColor.RED + "Missing Arguments");
+                        sender.sendMessage(ChatColor.RED + "Not enough Permissions");
                     }
 
                 } else if (args.length == 1 && !args[0].equalsIgnoreCase("options")) {
                     Player target = Bukkit.getPlayer(args[0]);
-                    if (Bukkit.getOnlinePlayers().contains(target) && target != null) {
+                    // Teleporting another player
+                    if (sender.isOp()) {
+                        if (Bukkit.getOnlinePlayers().contains(target) && target != null) {
+                            // Second if block that runs the command with the player argument (with permission)
+                            teleport(target);
 
-                        // Second if block that runs the command with the player argument (with permission)
-                        teleport(target);
+                        } else {
+                            // Second if block that runs the command with the biome argument (with permission)
+                            teleportWB(sender, args[0]);
 
+                        }
                     } else {
-
-                        // Second if block that runs the command with the biome argument (with permission)
-                        teleportWB(sender, args[0]);
-
+                        sender.sendMessage(ChatColor.RED + "Not enough Permissions");
                     }
 
                 } else if (args.length == 2) {
                     //Teleport someone else in a biome
 
-                    if (Bukkit.getOnlinePlayers().toString().contains(args[0])) {
+                    if (sender.isOp()) {
+                        if (Bukkit.getOnlinePlayers().toString().contains(args[0])) {
 
-                        Player target = Bukkit.getPlayer(args[0]);
-                        teleportWB(target, args[1]);
+                            Player target = Bukkit.getPlayer(args[0]);
+                            teleportWB(target, args[1]);
 
+                        } else {
+                            Player target = Bukkit.getPlayer(args[1]);
+                            teleportWB(target, args[0]);
+
+                        }
                     } else {
-
-                        Player target = Bukkit.getPlayer(args[1]);
-                        teleportWB(target, args[0]);
-
+                        sender.sendMessage(ChatColor.RED + "Not Enough Permissions");
                     }
 
                 } else {
@@ -65,33 +78,6 @@ public class Shut implements CommandExecutor {
             }
         }
         return false;
-    }
-
-    /**
-     * Metodo che serve a trovare un blocco random (sempre il più alto) nei limiti dati dalla config
-     *
-     * @return Bloc
-     */
-    public static Block randomBlock(Player p) {
-        // Method that finds a random block in the world (always the highest in the coordinates)
-        int xlimit = Main.getInstance().getConfig().getInt("settings.x-limit");
-        int zlimit = Main.getInstance().getConfig().getInt("settings.z-limit");
-
-        double pX = p.getLocation().getX();
-        double pZ = p.getLocation().getZ();
-
-        double x1 = pX + (Math.random() * xlimit);
-        if (((int) (Math.random() * 2)) == 1) {
-            x1 *= -1;
-        }
-
-        double z1 = pZ + (Math.random() * zlimit);
-        if (((int) (Math.random() * 2)) == 1) {
-            z1 *= -1;
-        }
-
-        Block b = Bukkit.getServer().getWorld("world").getHighestBlockAt((int) x1, (int) z1);
-        return b;
     }
 
     /**
@@ -137,19 +123,22 @@ public class Shut implements CommandExecutor {
         do {
             b = randomBlock(p);
             n++;
+            if (n >= 10) break;
         } while (b.isLiquid() || b.getBiome() != Biome.valueOf(biome.toUpperCase().replace("-", "_")));
 
-        if (Main.getInstance().getConfig().getBoolean("settings.debug")) {
-            System.out.println("[ShutDebug] Cycle Counter: " + n);
+        if (n < 10) {
+            if (Main.getInstance().getConfig().getBoolean("settings.debug")) {
+                System.out.println("[ShutDebug] Cycle Counter: " + n);
+            }
+
+            System.out.println("[Shut] " + p.getName() + " è stato deportato a " + b.getX() + " " + b.getY() + " " + b.getZ() + " nel bioma " + biome + ".");
+            Location l = new Location(Bukkit.getWorld("world"), (double) b.getX() + 0.5, (double) b.getY() + 1, (double) b.getZ() + 0.5);
+            p.sendMessage(ChatColor.RED + Main.getInstance().getConfig().getString("settings.tp-msg"));
+
+            p.teleport(l);
+        } else {
+            p.sendMessage(ChatColor.RED + "Biome 404");
         }
-
-        System.out.println("[Shut] " + p.getName() + " è stato deportato a " + b.getX() + " " + b.getY() + " " + b.getZ() + " nel bioma " + biome + ".");
-
-        Location l = new Location(Bukkit.getWorld("world"), (double) b.getX() + 0.5, (double) b.getY() + 1, (double) b.getZ() + 0.5);
-
-        p.sendMessage(ChatColor.RED + Main.getInstance().getConfig().getString("settings.tp-msg"));
-
-        p.teleport(l);
 
     }
 
@@ -159,8 +148,7 @@ public class Shut implements CommandExecutor {
      * @param sender Parametro che definisce il player che ha mandato il comando
      * @param args   Argomenti del comando
      */
-    public static void options(CommandSender sender, String[] args) {
-
+    private static void options(CommandSender sender, String[] args) {
         if (args[1].equalsIgnoreCase("xlimit")) {
             int x = Integer.parseInt(args[2]);
             Main.getInstance().getConfig().set("settings.x-limit", x);
@@ -196,6 +184,59 @@ public class Shut implements CommandExecutor {
             }
         } else {
             sender.sendMessage(ChatColor.RED + "Argomento non valido");
+        }
+
+    }
+
+    /**
+     * Metodo che serve a trovare un blocco random (sempre il più alto) nei limiti dati dalla config
+     *
+     * @return Bloc
+     */
+    private static Block randomBlock(Player p) {
+        // Method that finds a random block in the world (always the highest in the coordinates)
+        int xlimit = Main.getInstance().getConfig().getInt("settings.x-limit");
+        int zlimit = Main.getInstance().getConfig().getInt("settings.z-limit");
+
+        double pX = p.getLocation().getX();
+        double pZ = p.getLocation().getZ();
+
+        double x1 = pX + (Math.random() * xlimit);
+        if (((int) (Math.random() * 2)) == 1) {
+            x1 *= -1;
+        }
+
+        double z1 = pZ + (Math.random() * zlimit);
+        if (((int) (Math.random() * 2)) == 1) {
+            z1 *= -1;
+        }
+
+        Block b = Bukkit.getServer().getWorld("world").getHighestBlockAt((int) x1, (int) z1);
+        return b;
+    }
+
+    /**
+     * Metodo che serve a generare la pagina di aiuto del plugin
+     *
+     * @param sender Definisce il giocatore che manda il comando, usato per contollare i permessi
+     */
+    private void help(CommandSender sender) {
+        Player p = (Player) sender;
+        if (sender.isOp()) {
+            p.sendMessage(ChatColor.AQUA + "----------------<Shut>----------------");
+            p.sendMessage(ChatColor.RED + "              Help Page               ");
+            p.sendMessage(ChatColor.GREEN + "- Random Tp Yourself: " + ChatColor.WHITE + "/shut           ");
+            p.sendMessage(ChatColor.GREEN + "- Random Tp someone else:" + ChatColor.WHITE + "/shut TARGET");
+            p.sendMessage(ChatColor.GREEN + "- Random Tp Yourself To A Biome:" + ChatColor.WHITE + " /shut");
+            p.sendMessage("  BIOME");
+            p.sendMessage(ChatColor.GREEN + "- Random Tp someone else to a Biome:  ");
+            p.sendMessage("  /shut TARGET BIOME");
+            p.sendMessage(ChatColor.AQUA + "--------------------------------------");
+        } else {
+            p.sendMessage(ChatColor.AQUA + "----------------<Shut>----------------");
+            p.sendMessage(ChatColor.RED + "              Help Page               ");
+            p.sendMessage(ChatColor.GREEN + "- Random Tp Yourself: " + ChatColor.WHITE + "/shut           ");
+            p.sendMessage(ChatColor.AQUA + "--------------------------------------");
         }
 
     }

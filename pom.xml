@@ -6,7 +6,7 @@
 
     <groupId>com.mailo</groupId>
     <artifactId>Shut</artifactId>
-    <version>0.4-beta</version>
+    <version>1.0</version>
     <packaging>jar</packaging>
 
     <name>Shut</name>

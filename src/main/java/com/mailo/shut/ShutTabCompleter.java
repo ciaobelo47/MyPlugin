@@ -51,6 +51,8 @@ public class ShutTabCompleter implements TabCompleter {
         completations.add("options");
         completations.add("xlimit");
         completations.add("zlimit");
+        completations.add("debug");
+        completations.add("help");
         Collections.sort(completations);
         biomes.clear();
         players.clear();
