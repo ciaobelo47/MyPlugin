@@ -20,3 +20,7 @@ What you expected to happen?
  - OS: [es. Ubuntu]
  - Minecraft Version: [es. 1.20]
  - Spigot API Version: [es. 1.20.1-R0.1-SNAPSHOT]
+
+**Screenshots (optional)**
+If you can, send a screenshot of the error in the console/chat or in the game in general
+
