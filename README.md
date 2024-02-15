@@ -11,7 +11,7 @@ this
 
 ### Requirements
 
-- A Spigot server with Minecraft 1.20+
+- A [Spigot Server](https://www.spigotmc.org/wiki/spigot-installation/) with Minecraft 1.20+
 
 ### The Real Installation
 
