@@ -87,7 +87,7 @@ public class ShutMenuListener implements Listener {
 
                 }
             } else if (event.getCurrentItem().getType().equals(Material.GRASS_BLOCK)) {
-                String biome = event.getCurrentItem().getItemMeta().getDisplayName();
+                String biome = event.getCurrentItem().getItemMeta().getDisplayName().replace(" ", "_");
                 p.playSound(p, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0F, 0.0F);
                 p.closeInventory();
                 Shut.teleportWB(p, biome);
